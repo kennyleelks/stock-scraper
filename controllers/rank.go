@@ -55,14 +55,18 @@ func GetRankList(offset int) {
 		if err != nil {
 			log.Println(err.Error())
 		} else {
+			symbolId := t.Symbol
+			symbolName := t.SymbolName
+			price := t.Price
+
 			stock := models.Stock{
-				SymbolId:   t.Symbol,
-				SymbolName: t.SymbolName,
-				Price:      t.Price,
+				SymbolId:   symbolId,
+				SymbolName: symbolName,
+				Price:      price,
 				RankTime:   rankTime,
 			}
 
-			if models.DB.Model(&models.Stock{}).Where("symbol_id = ?", t.Symbol).Updates(models.Stock{Price: t.Price, RankTime: rankTime}).RowsAffected == 0 {
+			if models.DB.Model(&models.Stock{}).Where("symbol_id = ?", symbolId).Updates(models.Stock{Price: price, RankTime: rankTime}).RowsAffected == 0 {
 				models.DB.Create(&stock)
 			}
 		}
